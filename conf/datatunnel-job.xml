@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job>
+      <!-- 用id值区分多个task,之所以分为不同的task是因为可以按照多个时间点执行不同的任务  -->
+  <task id="task1" thread_num="2">
+     <!-- timer是非必填项，如果需要立刻执行就不需要配置timer  -->
+		  <timer>
+			    <interval>24*60*60*1000</interval>
+			    <start_time>2014-12-15 17:10:00</start_time>                                                                                                                                                                                                                           
+		  </timer>
+		  <!-- pair是必填项，表示task的子任务，id属性是区分多个pair的子任务的标识  -->
+			 <pair id="p1">
+	       <reader type="sql" pool_id="mysql_reader1">
+	      	  select id,name from project
+	       </reader>
+		     <writer type="sql" pool_id="mysql_writer1">
+		        insert into user values('#{uuid}', '${name}', 'test')
+		     </writer>
+			 </pair>
+			 
+			 <pair id="p2">
+	       <reader type="class" pool_id="hbase_reader1">
+	      	  com.ganqiang.datatunnel.api.example.HBaseReadExample
+	       </reader>
+		     <writer type="class" pool_id="mongodb_writer1">
+		        com.ganqiang.datatunnel.api.example.MongoDBWriteExample
+		     </writer>
+			 </pair>
+
+  </task>
+
+</job>
