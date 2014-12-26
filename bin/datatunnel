@@ -53,12 +53,12 @@ check_process_exists()
 if [ $# -lt 1 ]; then
   more <<'EOF'
 +====================================================+
-|    DataTunnel : a data processing channel   |
-+-------------------------------------------------------------------------------------------+
-|Usage:   datatunnel  <params>                |
-|params:  start,     Start the datatunnel     |
-|         stop,      Stop the datatunnel      |
-|         restart,   ReStart the datatunnel   |
+|    DataTunnel : a data processing channel          |
++----------------------------------------------------+
+|Usage:   datatunnel  <params>                       |
+|params:  start,     Start the datatunnel            |
+|         stop,      Stop the datatunnel             |
+|         restart,   ReStart the datatunnel          |
 +====================================================+
 EOF
   exit 1
@@ -97,7 +97,7 @@ elif [ "$1" = "restart" ] ; then
   fi
   while true;
   do
-    $DATATUNNEL_HOME/bin/swift-monitor.sh $RUNJAVA -classpath $CLASSPATH $JAVA_OPTS com.ganqiang.datatunnel.DataTunnel
+    $DATATUNNEL_HOME/bin/datatunnel-monitor.sh $RUNJAVA -classpath $CLASSPATH $JAVA_OPTS com.ganqiang.datatunnel.DataTunnel
     code=$?
     #echo "DataTunnel is terminated and exit code is " $code
     if [ $code == 0 ]; then

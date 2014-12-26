@@ -27,9 +27,10 @@
   
   -----------
 
-  Run : <br />
+  Run: <br />
   cd target<br />
-  tar xvf dbstat-version-bin.tar.gz<br />
-  chmod -R 700 dbstat-version-bin<br />
-  ./dbstat-version-bin/startup.sh
+  tar xvf DataTunnel-version-bin.tar.gz<br />
+  chmod -R 700 DataTunnel-version-bin<br />
+  ./DataTunnel-version-bin/datatunnel start/stop/restart
+
 
