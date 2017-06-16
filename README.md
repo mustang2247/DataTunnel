@@ -1,36 +1,3 @@
-
-                                 DataTunnel
-![Image text](https://github.com/ganqiang1983/DataTunnel/blob/master/logo.gif)
-
-  What is it? <br />
-  DataTunnelÊÇÒ»¿î»ùÓÚÒì¹¹´æ´¢µÄÊı¾İ´¦Àí¹ÜµÀ£¬¿ÉÒÔÊ®·Ö·½±ãÓÃÓÚÁ½¸öÍ¬¹¹»òÒì¹¹´æ´¢  <br /> 
-Ö®¼äµÄÊı¾İÍ¬²½£¬Êı¾İÍ³¼ÆµÈÊı¾İ´¦Àí¹¤×÷¡£ <br /> 
-
-Í¬Ê±£¬Ëü¾ßÓĞÒÔÏÂÌØµã£º  <br /> 
-1.¼¯³É¶àÀàĞÍ´æ´¢£ºMysql/Oracle/Hive/HDFS/HBase/MongoDB/Redis <br /> 
-
-2.¼òµ¥ÅäÖÃ£º¹ØÏµĞÔÊı¾İ¿âÖ»ĞèÒªÅäÖÃSql£¬HiveĞèÒªÅäÖÃhql£¬¾Í¿ÉÒÔÖ±½ÓÔËĞĞ£¬ <br /> 
-                          ¶øÆäËûÀàĞÍ´æ´¢Ä¿Ç°°æ±¾ĞèÒªÊµÏÖ½Ó¿Ú¡£ <br /> 
-
-3.¿ÉÀ©Õ¹±à³Ì½Ó¿Ú£º¸´ÔÓµÄÓ¦ÓÃ¿ÉÒÔ×Ô¶¨Òå½Ó¿Ú³ÌĞò£¬Ö»ĞèÊµÏÖReadableºÍWriteable½Ó¿Ú¼´¿É¡£ <br /> 
-
-4.¶àÈÎÎñÖ§³Ö£ºÖ§³Ö¶à¸öÈÎÎñÔÚ¶àÏß³Ì»·¾³ÏÂÍ¬Ê±ÔËĞĞ¡£ <br /> 
-
-  -----------
-
-  The Current Version : 1.0-beta
-
-  -----------
-
-  Package : <br />
-  mvn clean package
-  
-  -----------
-
-  Run: <br />
-  cd target<br />
-  tar xvf DataTunnel-version-bin.tar.gz<br />
-  chmod -R 700 DataTunnel-version-bin<br />
-  ./DataTunnel-version-bin/datatunnel start/stop/restart
-
-
+![Image text](https://raw.githubusercontent.com/bytegriffin/DataTunnel/master/logo.png)
+===========================
+  ä¸€æ¬¾åŸºäºå¼‚æ„ç¯å¢ƒçš„æ•°æ®å¤„ç†ç®¡é“ï¼Œä¸»è¦ç”¨äºå¼‚æ„å­˜å‚¨/æ•°æ®æµç­‰ç¯å¢ƒä¸‹çš„æ•°æ®æ¸…æ´—ã€æ•°æ®åŒæ­¥ã€æ•°æ®ç»Ÿè®¡ç­‰æ•°æ®å¤„ç†å·¥ä½œã€‚
