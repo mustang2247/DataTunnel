@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 定义task任务集合 -->
+<tasks>
+
+    <task>
+    	<name>task123</name>
+    	<operation>sync</operation>
+    	<timer_start></timer_start>
+    	<timer_interval></timer_interval>
+    	<readers>
+    		<reader>
+    			<type>mongodb</type>
+    			<address>mongodb://localhost/test</address>
+    			<value>select username,age,salary from test</value>
+    		</reader>
+    	</readers>
+  		<writers>
+    		<writer>
+    			<type>mongodb</type>
+    			<address>mongodb://localhost/test</address>
+    			<value>update table_name set name='${salary}' where ages='${age}'</value>
+    		</writer>
+    	</writers>
+    </task>
+
+</tasks>
