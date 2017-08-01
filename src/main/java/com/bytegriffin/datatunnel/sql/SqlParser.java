@@ -173,7 +173,7 @@ public final class SqlParser implements Initializer {
 				}
 			}
 			sqls.add(sql);
-			logger.debug("线程[{}]转换完的sql值为[{}] " ,Thread.currentThread().getName(), sql);
+			logger.debug("线程[{}]转换后的sql值为[{}] " ,Thread.currentThread().getName(), sql);
 		}
 		return sqls;
 	}

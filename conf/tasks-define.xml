@@ -9,16 +9,16 @@
     	<timer_interval></timer_interval>
     	<readers>
     		<reader>
-    			<type>mongodb</type>
-    			<address>mongodb://localhost/test</address>
-    			<value>select username,age,salary from test</value>
+    			<type>mysql</type>
+    			<address>jdbc:MySQL://localhost:3306/get4j?user=root&amp;password=root&amp;useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true&amp;useSSL=true</address>
+    			<value>select kk,vv from page</value>
     		</reader>
     	</readers>
   		<writers>
     		<writer>
-    			<type>mongodb</type>
-    			<address>mongodb://localhost/test</address>
-    			<value>update table_name set name='${salary}' where ages='${age}'</value>
+    			<type>kafka</type>
+    			<address>localhost:9092</address>
+    			<value>insert into topic3(key,value) values ('${kk}','${vv}')</value>
     		</writer>
     	</writers>
     </task>

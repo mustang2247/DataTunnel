@@ -9,13 +9,16 @@ import com.bytegriffin.datatunnel.conf.OperatorDefine;
 import com.bytegriffin.datatunnel.conf.TaskDefine;
 import com.bytegriffin.datatunnel.conf.TasksDefineXmlParser;
 import com.bytegriffin.datatunnel.meta.HBaseContext;
+import com.bytegriffin.datatunnel.meta.KafkaContext;
 import com.bytegriffin.datatunnel.meta.MongoDBContext;
 import com.bytegriffin.datatunnel.meta.MysqlContext;
 import com.bytegriffin.datatunnel.read.HBaseReader;
+import com.bytegriffin.datatunnel.read.KafkaConsumeReader;
 import com.bytegriffin.datatunnel.read.MongoDBReader;
 import com.bytegriffin.datatunnel.read.MysqlReader;
 import com.bytegriffin.datatunnel.sql.SqlParser;
 import com.bytegriffin.datatunnel.write.HBaseWriter;
+import com.bytegriffin.datatunnel.write.KafkaProduceWriter;
 import com.bytegriffin.datatunnel.write.MongoDBWriter;
 import com.bytegriffin.datatunnel.write.MysqlWriter;
 import com.google.common.base.Strings;
@@ -81,6 +84,15 @@ public class TaskManager {
 							opt.setReader(new MongoDBReader());
 						} else if(opt.isWriter()){
 							opt.setWriter(new MongoDBWriter());
+						}
+						break;
+					case kafka:
+						KafkaContext kafka = new KafkaContext();
+						kafka.init(opt);
+						if(opt.isReader()){
+							opt.setReader(new KafkaConsumeReader());
+						} else if(opt.isWriter()){
+							opt.setWriter(new KafkaProduceWriter());
 						}
 						break;
 					default:
