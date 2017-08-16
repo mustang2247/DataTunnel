@@ -14,7 +14,7 @@ import com.google.common.collect.Lists;
 public class TasksDefineXmlParser {
 
 	private static final Logger logger = LogManager.getLogger(TasksDefineXmlParser.class);
-	private static final String conf_path = System.getProperty("user.dir") + File.separator + "conf" + File.separator;
+	protected static final String conf_path = System.getProperty("user.dir") + File.separator + "conf" + File.separator;
 	private final static String taskdefine_xml_file = conf_path + "tasks-define.xml";
 	private static final String task_node = "task";
 	private static final String name_node = "name";

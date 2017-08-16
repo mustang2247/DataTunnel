@@ -12,8 +12,7 @@ import com.bytegriffin.datatunnel.core.Globals;
 public class SystemPropertiesParser {
 
 	private static final Logger logger = LogManager.getLogger(SystemPropertiesParser.class);
-	private static String system_properties = System.getProperty("user.dir") + 
-			File.separator + "conf" + File.separator + "system.properties";
+	private static String system_properties = TasksDefineXmlParser.conf_path + "system.properties";
 	private static final String redis_mode = "redis.mode";
 	private static final String redis_data_type = "redis.data.type";
 
