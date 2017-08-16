@@ -49,7 +49,7 @@ public class KafkaConsumeReader implements Readable {
     		logger.info("线程[{}]调用KafkaConsumeReader执行任务[{}]", Thread.currentThread().getName(), opt.getKey());
         }
 	}
-	
+
 	/**
 	 * 获取topic名称
 	 * 格式：select * from topic_name

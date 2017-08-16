@@ -12,15 +12,18 @@ import com.bytegriffin.datatunnel.meta.HBaseContext;
 import com.bytegriffin.datatunnel.meta.KafkaContext;
 import com.bytegriffin.datatunnel.meta.MongoDBContext;
 import com.bytegriffin.datatunnel.meta.MysqlContext;
+import com.bytegriffin.datatunnel.meta.RedisContext;
 import com.bytegriffin.datatunnel.read.HBaseReader;
 import com.bytegriffin.datatunnel.read.KafkaConsumeReader;
 import com.bytegriffin.datatunnel.read.MongoDBReader;
 import com.bytegriffin.datatunnel.read.MysqlReader;
+import com.bytegriffin.datatunnel.read.RedisReader;
 import com.bytegriffin.datatunnel.sql.SqlParser;
 import com.bytegriffin.datatunnel.write.HBaseWriter;
 import com.bytegriffin.datatunnel.write.KafkaProduceWriter;
 import com.bytegriffin.datatunnel.write.MongoDBWriter;
 import com.bytegriffin.datatunnel.write.MysqlWriter;
+import com.bytegriffin.datatunnel.write.RedisWriter;
 import com.google.common.base.Strings;
 
 public class TaskManager {
@@ -95,6 +98,15 @@ public class TaskManager {
 							opt.setWriter(new KafkaProduceWriter());
 						}
 						break;
+					case redis:
+						RedisContext redis = new RedisContext();
+						redis.init(opt);
+						if(opt.isReader()){
+							opt.setReader(new RedisReader());
+						} else if(opt.isWriter()){
+							opt.setWriter(new RedisWriter());
+						}
+						break;	
 					default:
 						break;
 				}

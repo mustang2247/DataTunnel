@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 定义task任务集合 -->
 <tasks>
-
     <task>
     	<name>task123</name>
     	<operation>sync</operation>
@@ -9,15 +8,20 @@
     	<timer_interval></timer_interval>
     	<readers>
     		<reader>
-    			<type>mysql</type>
-    			<address>jdbc:MySQL://localhost:3306/get4j?user=root&amp;password=root&amp;useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true&amp;useSSL=true</address>
+    			<type>redis</type>
+    			<address>localhost</address>
     			<value>select kk,vv from page</value>
+    		</reader>
+    		<reader>
+    			<type>222</type>
+    			<address>loc3333333alhost</address>
+    			<value>3333 333,vv from page</value>
     		</reader>
     	</readers>
   		<writers>
     		<writer>
-    			<type>kafka</type>
-    			<address>localhost:9092</address>
+    			<type>redis</type>
+    			<address>localhost</address>
     			<value>insert into topic3(key,value) values ('${kk}','${vv}')</value>
     		</writer>
     	</writers>

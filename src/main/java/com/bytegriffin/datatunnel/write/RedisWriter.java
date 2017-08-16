@@ -17,10 +17,7 @@ import com.bytegriffin.datatunnel.sql.Field;
 import com.bytegriffin.datatunnel.sql.SqlMapper;
 import com.bytegriffin.datatunnel.sql.SqlParser;
 
-/**
- * 生产者负责讲数据写到Kafka中
- */
-public class KafkaProduceWriter implements Writeable {
+public class RedisWriter implements Writeable {
 
 	private static final Logger logger = LogManager.getLogger(KafkaProduceWriter.class);
 
@@ -31,7 +28,7 @@ public class KafkaProduceWriter implements Writeable {
 		List<String> sqls = SqlParser.getWriteSql(msg.getResults(), opt.getValue());
 		String topic = getTopicName(opt.getValue());
 		write(properties, topic, sqls);
-		logger.info("线程[{}]调用KafkaProduceWriter执行任务[{}]",Thread.currentThread().getName(), opt.getKey());
+		logger.info("线程[{}]调用RedisWriter执行任务[{}]",Thread.currentThread().getName(), opt.getKey());
 	}
 
 	/**
