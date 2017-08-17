@@ -9,6 +9,14 @@ import com.bytegriffin.datatunnel.sql.Field;
  */
 public class Record {
 	
+	public Record(){
+		
+	}
+	
+	public Record(List<Field> fields){
+		this.fields = fields;
+	}
+	
 	private List<Field> fields;
 	
 	public List<Field> getFields() {

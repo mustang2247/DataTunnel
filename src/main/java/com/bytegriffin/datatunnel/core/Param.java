@@ -7,23 +7,23 @@ import com.bytegriffin.datatunnel.meta.Record;
 
 public class Param {
 
-	private TaskDefine taskdefine;
-	private List<Record> results;
+	private TaskDefine taskDefine;
+	private List<Record> records;
 
-	public TaskDefine getTaskdefine() {
-		return taskdefine;
+	public TaskDefine getTaskDefine() {
+		return taskDefine;
 	}
 
-	public void setTaskdefine(TaskDefine taskdefine) {
-		this.taskdefine = taskdefine;
+	public void setTaskDefine(TaskDefine taskDefine) {
+		this.taskDefine = taskDefine;
 	}
 
-	public List<Record> getResults() {
-		return results;
+	public List<Record> getRecords() {
+		return records;
 	}
 
-	public void setResults(List<Record> results) {
-		this.results = results;
+	public void setRecords(List<Record> records) {
+		this.records = records;
 	}
 
 }

@@ -49,6 +49,20 @@ public abstract class SqlMapper {
         List<String> tableList = tablesNamesFinder.getTableList(stat);
         return tableList.get(0).trim();
 	}
+	
+	/**
+	 * 获取where条件中的字段名与字段值
+	 * @param condition
+	 * @return
+	 */
+	public static List<Field> getWhereFields(String condition){
+		List<String> conlist = Splitter.on("=").trimResults().omitEmptyStrings().splitToList(condition);
+		String left = conlist.get(0).toLowerCase().trim();
+		String right = SqlParser.removeSqlQuotes(conlist.get(1).trim());
+		List<Field> list = Lists.newArrayList();
+		list.add(new Field(left, right));
+		return list;
+	}
 
 	/**
 	 * 获取and连接的where条件，例如：name=abc / age=13

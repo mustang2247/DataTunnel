@@ -9,8 +9,6 @@ import org.bson.Document;
 import com.bytegriffin.datatunnel.conf.OperatorDefine;
 import com.bytegriffin.datatunnel.core.Globals;
 import com.bytegriffin.datatunnel.sql.SqlMapper;
-import com.bytegriffin.datatunnel.sql.SqlParser;
-import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
@@ -77,10 +75,9 @@ public class MongoDBContext implements Initializer {
 	 */
 	private static void setQueryFilter(String condition, Document searchQuery){
 		//获取类似 name = zhangsan 单个where条件 ，暂时不支持like查询
-		List<String> conlist = Splitter.on("=").trimResults().omitEmptyStrings().splitToList(condition);
-		String left = conlist.get(0).toLowerCase().trim();
-		String right = SqlParser.removeSqlQuotes(conlist.get(1).trim());
-		searchQuery.append(left, right);
+		SqlMapper.getWhereFields(condition).forEach(field -> {
+			searchQuery.append(field.getFieldName(), field.getFieldValue());
+		});
 	}
 
 }

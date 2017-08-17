@@ -42,7 +42,7 @@ public class HBaseReader implements Readable {
 		OperatorDefine opt = Globals.operators.get(this.hashCode());
 		String newsql = SqlParser.getReadSql(opt.getValue());
 		List<Record> results = select(connection, newsql);
-		msg.setResults(results);
+		msg.setRecords(results);
 		ctx.write(msg);
 		logger.info("线程[{}]调用MysqlReader执行任务[{}]", Thread.currentThread().getName(), opt.getKey());
 	}

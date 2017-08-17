@@ -20,7 +20,7 @@ import com.google.common.collect.Lists;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-public class MongoDBWriter  implements Writeable {
+public class MongoDBWriter implements Writeable {
 
 	private static final Logger logger = LogManager.getLogger(MongoDBWriter.class);
 
@@ -28,7 +28,7 @@ public class MongoDBWriter  implements Writeable {
 	public void channelRead(HandlerContext ctx, Param msg) {
 		MongoDatabase database = Globals.getMongoDatabase(this.hashCode());
 		OperatorDefine opt = Globals.operators.get(this.hashCode());
-		List<String> sqls = SqlParser.getWriteSql(msg.getResults(), opt.getValue());
+		List<String> sqls = SqlParser.getWriteSql(msg.getRecords(), opt.getValue());
 		write(database, sqls);
 		logger.info("线程[{}]调用MongoDBWriter执行任务[{}]",Thread.currentThread().getName(), opt.getKey());
 	}

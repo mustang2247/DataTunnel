@@ -28,7 +28,7 @@ public class KafkaProduceWriter implements Writeable {
 	public void channelRead(HandlerContext ctx, Param msg) {
 		Properties properties = Globals.getKafkaProperties(this.hashCode());
 		OperatorDefine opt = Globals.operators.get(this.hashCode());
-		List<String> sqls = SqlParser.getWriteSql(msg.getResults(), opt.getValue());
+		List<String> sqls = SqlParser.getWriteSql(msg.getRecords(), opt.getValue());
 		String topic = getTopicName(opt.getValue());
 		write(properties, topic, sqls);
 		logger.info("线程[{}]调用KafkaProduceWriter执行任务[{}]",Thread.currentThread().getName(), opt.getKey());

@@ -44,7 +44,7 @@ public class KafkaConsumeReader implements Readable {
             	continue;
             }
             List<Record> results = translate(records);
-    		msg.setResults(results);
+    		msg.setRecords(results);
     		ctx.write(msg);
     		logger.info("线程[{}]调用KafkaConsumeReader执行任务[{}]", Thread.currentThread().getName(), opt.getKey());
         }

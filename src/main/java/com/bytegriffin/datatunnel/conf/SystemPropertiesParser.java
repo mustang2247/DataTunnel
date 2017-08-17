@@ -21,7 +21,6 @@ public class SystemPropertiesParser {
 			PropertiesConfiguration conf = new PropertiesConfiguration(new File(system_properties));
 			Globals.redis_mode = conf.getString(redis_mode);
 			Globals.redis_data_type = conf.getString(redis_data_type);
-			
 			logger.info("配置文件[{}]读取完成。", system_properties);
 		} catch (ConfigurationException e) {
 			logger.error("配置文件[{}]读取失败。", system_properties);

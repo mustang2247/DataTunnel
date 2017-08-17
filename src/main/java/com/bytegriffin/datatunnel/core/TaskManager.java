@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.bytegriffin.datatunnel.conf.OperatorDefine;
+import com.bytegriffin.datatunnel.conf.SystemPropertiesParser;
 import com.bytegriffin.datatunnel.conf.TaskDefine;
 import com.bytegriffin.datatunnel.conf.TasksDefineXmlParser;
 import com.bytegriffin.datatunnel.meta.HBaseContext;
@@ -41,6 +42,8 @@ public class TaskManager {
 	 * @return
 	 */
 	public TaskManager loads() {
+		SystemPropertiesParser properties = new SystemPropertiesParser();
+		properties.load();
 		TasksDefineXmlParser xml = new TasksDefineXmlParser();
 		tasks = xml.load();
 		tasks.forEach(task -> {
@@ -133,7 +136,7 @@ public class TaskManager {
 				Globals.operators.put(readerDefine.getReader().hashCode(), readerDefine);
 			});
 			Param param = new Param();
-			param.setTaskdefine(task);
+			param.setTaskDefine(task);
 			pipeline.request(param);
 		});
 	}

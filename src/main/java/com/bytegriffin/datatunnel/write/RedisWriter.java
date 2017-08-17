@@ -1,11 +1,7 @@
 package com.bytegriffin.datatunnel.write;
 
 import java.util.List;
-import java.util.Properties;
 
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,45 +9,80 @@ import com.bytegriffin.datatunnel.conf.OperatorDefine;
 import com.bytegriffin.datatunnel.core.Globals;
 import com.bytegriffin.datatunnel.core.HandlerContext;
 import com.bytegriffin.datatunnel.core.Param;
-import com.bytegriffin.datatunnel.sql.Field;
+import com.bytegriffin.datatunnel.sql.DeleteObject;
+import com.bytegriffin.datatunnel.sql.InsertObject;
 import com.bytegriffin.datatunnel.sql.SqlMapper;
 import com.bytegriffin.datatunnel.sql.SqlParser;
+import com.bytegriffin.datatunnel.sql.UpdateObject;
+import com.google.common.base.Strings;
+
+import redis.clients.jedis.JedisCommands;
 
 public class RedisWriter implements Writeable {
 
-	private static final Logger logger = LogManager.getLogger(KafkaProduceWriter.class);
+	private static final Logger logger = LogManager.getLogger(RedisWriter.class);
 
 	@Override
 	public void channelRead(HandlerContext ctx, Param msg) {
-		Properties properties = Globals.getKafkaProperties(this.hashCode());
+		JedisCommands jedis = Globals.getJedisCommands(this.hashCode());
 		OperatorDefine opt = Globals.operators.get(this.hashCode());
-		List<String> sqls = SqlParser.getWriteSql(msg.getResults(), opt.getValue());
-		String topic = getTopicName(opt.getValue());
-		write(properties, topic, sqls);
+		List<String> sqls = SqlParser.getWriteSql(msg.getRecords(), opt.getValue());
+		write(jedis, sqls);
 		logger.info("线程[{}]调用RedisWriter执行任务[{}]",Thread.currentThread().getName(), opt.getKey());
 	}
 
-	/**
-	 * 获取topic名称
-	 * 格式：insert into table_name (column1,column2) values (value1,value2)
-	 * @param sql
-	 * @return
-	 */
-	private String getTopicName(String sql){
-		return SqlMapper.insert(sql).getTableName();
-	}
-
-	/**
-	 * 目前只支持insert操作
-	 * @param properties
-	 */
-	private void write(Properties properties, String topicName, List<String> sqls){
-		Producer<String, String> producer = new KafkaProducer<>(properties);
-		sqls.forEach(sql -> {
-			List<Field> ff = SqlMapper.insert(sql).getFields();
-			producer.send(new ProducerRecord<>(topicName, ff.get(0).getFieldValue().toString(), ff.get(1).getFieldValue().toString()));
-		});
-		producer.close();
+	private void write(JedisCommands jedis, List<String> sqls) {
+		if (sqls == null || sqls.isEmpty()) {
+			return;
+		}
+		try {
+			String firstSql = sqls.get(0).toLowerCase().trim();
+			if(firstSql.contains("delete")){//delete操作:支持and/or
+				sqls.stream().filter(sql -> !Strings.isNullOrEmpty(sql)).forEach(sql -> {
+					DeleteObject delete = SqlMapper.delete(sql);
+					if(Strings.isNullOrEmpty(delete.getWhere())){//如果没有where条件,全部删除
+						jedis.del(delete.getWhere());
+					} else {//如果有where条件
+						List<String> ands = delete.getAndCondition(delete.getWhere());
+						List<String> ors = delete.getOrCondition(delete.getWhere());
+						if (ands != null){//用and连接的查询条件
+							ands.stream().filter(con -> !Strings.isNullOrEmpty(con)).forEach(con -> {
+								SqlMapper.getWhereFields(con).forEach(field -> {
+									jedis.hdel(delete.getTableName(), field.getFieldName());
+								});
+							});
+						} else if(ors != null){//用or连接的查询条件
+							ors.stream().filter(con -> !Strings.isNullOrEmpty(con)).forEach(con -> {
+								SqlMapper.getWhereFields(con).forEach(field -> {
+									jedis.hdel(delete.getTableName(), field.getFieldName());
+									return;
+								});
+							});
+						} else {//只存在一个查询条件
+							SqlMapper.getWhereFields(delete.getWhere()).forEach(field -> {
+								jedis.hdel(delete.getTableName(), field.getFieldName());
+							});
+						}
+					}
+				});
+			} else if(firstSql.contains("insert")){
+				sqls.stream().filter(sql -> !Strings.isNullOrEmpty(sql)).forEach(sql -> {
+					InsertObject insert = SqlMapper.insert(sql);
+					insert.getFields().stream().filter(field-> field != null).forEach(field -> {
+						jedis.hset(insert.getTableName(), field.getFieldName(), field.getFieldValue().toString());
+					});
+				});
+			} else if(firstSql.contains("update")){//update操作：暂不支持where条件
+				sqls.stream().filter(sql -> !Strings.isNullOrEmpty(sql)).forEach(sql -> {
+					UpdateObject update = SqlMapper.update(sql);
+					update.getFields().stream().filter(field-> field != null).forEach(field -> {
+						jedis.hset(update.getTableName(), field.getFieldName(), field.getFieldValue().toString());
+					});
+				});
+			}
+		} catch (Exception e) {
+			logger.error("不能执行更新sql: [{}]" ,sqls, e);
+		}
 	}
 
 }

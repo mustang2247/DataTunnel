@@ -33,6 +33,9 @@ public class RedisContext implements Initializer {
 
 	private static String redisMode = Globals.redis_mode;//默认是单机
 	private static String redisAuth;
+	
+	public static final String list = "list"; //list模式
+	public static final String hash = "hash";//hash模式
 
 	@Override
 	public void init(OperatorDefine operator) {
@@ -50,7 +53,7 @@ public class RedisContext implements Initializer {
 			commands = cluster(address, redisAuth);
 		}
 		Globals.setJedisCommands(operator.getKey(), commands);
-		logger.info("Redis的初始化完成。");
+		logger.info("任务[{}]加载组件RedisContext[{}]的初始化完成。", operator.getName(), operator.getId());
 	}
 
 	private static JedisPoolConfig config() {

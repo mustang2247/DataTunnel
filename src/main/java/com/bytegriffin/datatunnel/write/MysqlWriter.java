@@ -24,7 +24,7 @@ public class MysqlWriter implements Writeable {
 	public void channelRead(HandlerContext ctx, Param msg) {
 		DataSource dataSource = Globals.getDataSource(this.hashCode());
 		OperatorDefine opt = Globals.operators.get(this.hashCode());
-		List<String> sqls = SqlParser.getWriteSql(msg.getResults(), opt.getValue());
+		List<String> sqls = SqlParser.getWriteSql(msg.getRecords(), opt.getValue());
 		write(dataSource, sqls);
 		logger.info("线程[{}]调用MysqlWriter执行任务[{}]",Thread.currentThread().getName(), opt.getKey());
 	}
