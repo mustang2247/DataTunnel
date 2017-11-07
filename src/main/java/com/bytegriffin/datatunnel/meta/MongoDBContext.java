@@ -38,15 +38,15 @@ public class MongoDBContext implements Initializer {
 	}
 
 	private Builder getConfigBuilder() {
-		return new MongoClientOptions.Builder().socketKeepAlive(true) // 是否保持长链接
-		.connectTimeout(5000) // 链接超时时间
-		.socketTimeout(5000) // read数据超时时间
-		.readPreference(ReadPreference.primary()) // 最近优先策略
-		.connectionsPerHost(30) // 每个地址最大请求数
-		.maxWaitTime(1000 * 60 * 2) // 长链接的最大等待时间
-		.threadsAllowedToBlockForConnectionMultiplier(50); // 一个socket最大的等待请求数
+		return new MongoClientOptions.Builder()
+			.connectTimeout(5000) // 链接超时时间
+			.socketTimeout(5000) // read数据超时时间
+			.readPreference(ReadPreference.primary()) // 最近优先策略
+			.connectionsPerHost(30) // 每个地址最大请求数
+			.maxWaitTime(1000 * 60 * 2) // 长链接的最大等待时间
+			.threadsAllowedToBlockForConnectionMultiplier(50); // 一个socket最大的等待请求数
 	}
-	
+
 	/**
 	 * 根据where条件设置多个查询条件
 	 * @param sqlMapper

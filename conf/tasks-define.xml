@@ -11,14 +11,14 @@
     		<reader>
     			<type>mysql</type>
     			<address>jdbc:mysql://localhost:3306/get4j?user=root&amp;password=root&amp;useUnicode=true&amp;characterEncoding=gbk&amp;autoReconnect=true&amp;useSSL=true</address>
-    			<value>select kk,vv from page</value>
+    			<value>select seed_name,site_host from page</value>
     		</reader>
     	</readers>
   		<writers>
     		<writer>
-    			<type>redis</type>
+    			<type>mongodb</type>
     			<address>localhost</address>
-    			<value>UPDATE web SET sina = '${kk}',baidu='${vv}'</value>
+    			<value>UPDATE web SET sina = '${seed_name}',baidu='${site_host}'</value>
     		</writer>
     	</writers>
     </task>
