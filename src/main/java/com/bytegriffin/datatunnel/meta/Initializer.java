@@ -4,6 +4,6 @@ import com.bytegriffin.datatunnel.conf.OperatorDefine;
 
 public interface Initializer {
 
-	public void init(OperatorDefine operator);
+    public void init(OperatorDefine operator);
 
 }

@@ -1,9 +1,9 @@
 package com.bytegriffin.datatunnel.util;
 
+import com.google.common.base.Strings;
+
 import java.security.MessageDigest;
 import java.util.UUID;
-
-import com.google.common.base.Strings;
 
 /**
  * MD5生成器
