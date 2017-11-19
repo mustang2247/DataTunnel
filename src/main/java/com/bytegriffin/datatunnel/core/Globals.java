@@ -4,6 +4,8 @@ import com.bytegriffin.datatunnel.conf.OperatorDefine;
 import com.google.common.collect.Maps;
 import com.mongodb.client.MongoDatabase;
 import org.apache.hadoop.hbase.client.Connection;
+import org.apache.lucene.store.FSDirectory;
+
 import redis.clients.jedis.JedisCommands;
 
 import javax.sql.DataSource;
@@ -27,10 +29,16 @@ public final class Globals {
     private static Map<String, Connection> hbase_connection_caches = Maps.newHashMap();
     // Mongo数据库缓存 key: task_name_md5_address  value：hbase数据库连接
     private static Map<String, MongoDatabase> mongo_database_caches = Maps.newHashMap();
-    // Kafka缓存 key: kafka_name value: kafka属性
+    // Kafka缓存 key: kafka_name_md5_address value: kafka属性
     private static Map<String, Properties> kafka_properties_caches = Maps.newHashMap();
-    // Redis缓存 key: redis_name value: redis属性
+    // Redis缓存 key: redis_name_md5_address value: redis属性
     private static Map<String, JedisCommands> redis_command_caches = Maps.newHashMap();
+    // Lucene缓存 key: lucene_name_md5_address value: lucene文件目录
+    private static Map<String, FSDirectory> lucene_fsdir_caches = Maps.newHashMap();
+
+    public static void setLuceneDir(String key, FSDirectory dir) {
+    	lucene_fsdir_caches.put(key, dir);
+    }
 
     public static void setJedisCommands(String key, JedisCommands commands) {
         redis_command_caches.put(key, commands);
@@ -50,6 +58,14 @@ public final class Globals {
 
     public static void setKafkaProperties(String key, Properties prop) {
         kafka_properties_caches.put(key, prop);
+    }
+    
+    public static FSDirectory getLuceneDir(Integer hashCode) {
+        if (operators.containsKey(hashCode)) {
+            OperatorDefine optdefine = operators.get(hashCode);
+            return lucene_fsdir_caches.get(optdefine.getKey());
+        }
+        return null;
     }
 
     public static JedisCommands getJedisCommands(Integer hashCode) {

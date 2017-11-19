@@ -9,16 +9,16 @@
     	<timer_interval></timer_interval>
     	<readers>
     		<reader>
-    			<type>lucene</type>
-    			<address>/opt</address>
-    			<value>select LastName,Address from Persons where LastName='ffff'</value>
+    			<type>mysql</type>
+    			<address>jdbc:mysql://localhost:3306/get4j?user=root&amp;password=root&amp;useUnicode=true&amp;characterEncoding=gbk&amp;autoReconnect=true&amp;useSSL=true</address>
+    			<value>select seed_name,site_host from page</value>
     		</reader>
     	</readers>
   		<writers>
     		<writer>
     			<type>lucene</type>
     			<address>/opt/</address>
-    			<value>DELETE FROM Persons WHERE Address = '${Address}' </value>
+    			<value>INSERT INTO Persons (LastName, Address) VALUES ('${seed_name}', '${site_host}')</value>
     		</writer>
     	</writers>
     </task>

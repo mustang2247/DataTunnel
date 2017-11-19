@@ -99,6 +99,15 @@ public class TaskManager {
                             opt.setWriter(new RedisWriter());
                         }
                         break;
+                    case lucene:
+                        LuceneContext lucene = new LuceneContext();
+                        lucene.init(opt);
+                        if (opt.isReader()) {
+                            opt.setReader(new LuceneReader());
+                        } else if (opt.isWriter()) {
+                            opt.setWriter(new LuceneWriter());
+                        }
+                        break;    
                     default:
                         break;
                 }

@@ -50,6 +50,28 @@ public abstract class SqlMapper {
         List<String> tableList = tablesNamesFinder.getTableList(stat);
         return tableList.get(0).trim();
     }
+    
+    /**
+     * 获取某SQL中的Table　Name
+     * @param sql
+     * @return
+     */
+    public static String getTableName(String sql) {
+    	if(Strings.isNullOrEmpty(sql)) {
+    		return null;
+    	}
+    	String lowersql = sql.toLowerCase();
+    	if(lowersql.contains("select")) {
+    		return select(sql).getTableName();
+    	} else if(lowersql.contains("insert")) {
+    		return insert(sql).getTableName();
+    	} else if(lowersql.contains("update")) {
+    		return update(sql).getTableName();
+    	} else if(lowersql.contains("delete")) {
+    		return delete(sql).getTableName();
+    	}
+    	return null;
+    }
 
     /**
      * 获取where条件中的字段名与字段值
@@ -88,6 +110,21 @@ public abstract class SqlMapper {
     public List<String> getOrCondition(String where) {
         if (where.toLowerCase().contains("or")) {
             return Splitter.on("or").trimResults().omitEmptyStrings().splitToList(where.toLowerCase());
+        }
+        return null;
+    }
+
+    /**
+     * 获取包含like的where条件
+     * 注意：暂时只支持一个like条件
+     * @param where
+     * @return
+     */
+    public Field getLikeCondition(String where) {
+        if (where.toLowerCase().contains("like")) {
+        	List<String> list = Splitter.on("like").trimResults().omitEmptyStrings()
+        			.splitToList(where.toLowerCase());
+        	return new Field(list.get(0), list.get(1));
         }
         return null;
     }

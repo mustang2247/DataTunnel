@@ -35,7 +35,7 @@ public class MongoDBWriter implements Writeable {
      * @param sqls
      */
     private void write(MongoDatabase database, List<String> sqls) {
-        if (sqls == null || sqls.isEmpty()) {
+        if (database == null || sqls == null || sqls.isEmpty()) {
             return;
         }
         try {
