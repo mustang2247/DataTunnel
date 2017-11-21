@@ -2,7 +2,7 @@ package com.bytegriffin.datatunnel.core;
 
 public enum DataType {
 
-    mysql("mysql"), mongodb("mongodb"), hbase("habse"), lucene("lucene"), clazz("class"), kafka("kafka"), redis("redis");
+    mysql("mysql"), mongodb("mongodb"), hbase("habse"), lucene("lucene"), clazz("class"), kafka("kafka"), redis("redis"), rabbitmq("rabbitmq");
 
     private String value;
 

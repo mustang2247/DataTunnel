@@ -38,6 +38,8 @@
 		<jedis.version>2.9.0</jedis.version>
 		<!-- 注意：lucene版本需要java8 -->
 		<lucene.version>7.1.0</lucene.version>
+		<rabbitmq.version>5.0.0</rabbitmq.version>
+		<protostuff.version>1.6.0</protostuff.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
@@ -179,6 +181,24 @@
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-analyzers-smartcn</artifactId>
 			<version>${lucene.version}</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>com.rabbitmq</groupId>
+		  <artifactId>amqp-client</artifactId>
+		  <version>${rabbitmq.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>io.protostuff</groupId>
+		    <artifactId>protostuff-core</artifactId>
+		    <version>${protostuff.version}</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>io.protostuff</groupId>
+		    <artifactId>protostuff-runtime</artifactId>
+		    <version>${protostuff.version}</version>
 		</dependency>
 
 	</dependencies>

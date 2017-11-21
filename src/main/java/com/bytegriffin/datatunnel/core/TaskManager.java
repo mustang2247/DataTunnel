@@ -107,6 +107,15 @@ public class TaskManager {
                         } else if (opt.isWriter()) {
                             opt.setWriter(new LuceneWriter());
                         }
+                        break;
+                    case rabbitmq:
+                        RabbitMQContext rabbitmq = new RabbitMQContext();
+                        rabbitmq.init(opt);
+                        if (opt.isReader()) {
+                            opt.setReader(new RabbitMQConsumerReader());
+                        } else if (opt.isWriter()) {
+                            opt.setWriter(new RabbitMQProduceWriter());
+                        }
                         break;    
                     default:
                         break;

@@ -2,6 +2,8 @@ package com.bytegriffin.datatunnel.meta;
 
 import com.bytegriffin.datatunnel.conf.OperatorDefine;
 import com.bytegriffin.datatunnel.core.Globals;
+import com.bytegriffin.datatunnel.sql.SqlMapper;
+
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.logging.log4j.LogManager;
@@ -46,6 +48,7 @@ public class KafkaContext implements Initializer {
                 props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
                         "org.apache.kafka.common.serialization.StringSerializer");
             }
+            props.put(topic, SqlMapper.getTableName(operator.getValue()));
             Globals.setKafkaProperties(operator.getKey(), props);
             logger.info("任务[{}]加载组件KafkaContext[{}]的初始化完成。", operator.getName(), operator.getId());
         } catch (RuntimeException re) {

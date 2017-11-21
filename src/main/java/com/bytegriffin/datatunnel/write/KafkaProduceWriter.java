@@ -4,6 +4,7 @@ import com.bytegriffin.datatunnel.conf.OperatorDefine;
 import com.bytegriffin.datatunnel.core.Globals;
 import com.bytegriffin.datatunnel.core.HandlerContext;
 import com.bytegriffin.datatunnel.core.Param;
+import com.bytegriffin.datatunnel.meta.KafkaContext;
 import com.bytegriffin.datatunnel.sql.Field;
 import com.bytegriffin.datatunnel.sql.SqlMapper;
 import com.bytegriffin.datatunnel.sql.SqlParser;
@@ -28,20 +29,9 @@ public class KafkaProduceWriter implements Writeable {
         Properties properties = Globals.getKafkaProperties(this.hashCode());
         OperatorDefine opt = Globals.operators.get(this.hashCode());
         List<String> sqls = SqlParser.getWriteSql(msg.getRecords(), opt.getValue());
-        String topic = getTopicName(opt.getValue());
+        String topic = properties.getProperty(KafkaContext.topic);
         write(properties, topic, sqls);
         logger.info("线程[{}]调用KafkaProduceWriter执行任务[{}]", Thread.currentThread().getName(), opt.getKey());
-    }
-
-    /**
-     * 获取topic名称
-     * 格式：insert into table_name (column1,column2) values (value1,value2)
-     *
-     * @param sql
-     * @return
-     */
-    private String getTopicName(String sql) {
-        return SqlMapper.insert(sql).getTableName();
     }
 
     /**

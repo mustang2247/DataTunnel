@@ -3,6 +3,8 @@ package com.bytegriffin.datatunnel.core;
 import com.bytegriffin.datatunnel.conf.OperatorDefine;
 import com.google.common.collect.Maps;
 import com.mongodb.client.MongoDatabase;
+import com.rabbitmq.client.Channel;
+
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.lucene.store.FSDirectory;
 
@@ -35,6 +37,12 @@ public final class Globals {
     private static Map<String, JedisCommands> redis_command_caches = Maps.newHashMap();
     // Lucene缓存 key: lucene_name_md5_address value: lucene文件目录
     private static Map<String, FSDirectory> lucene_fsdir_caches = Maps.newHashMap();
+    // RabbitMQ缓存 key: rabbitmq_name_md5_address value: rabbitmq channel
+    private static Map<String, Channel> rabbitmq_channel_caches = Maps.newHashMap();
+
+    public static void setRabbitMQChannel(String key, Channel channel) {
+    	rabbitmq_channel_caches.put(key, channel);
+    }
 
     public static void setLuceneDir(String key, FSDirectory dir) {
     	lucene_fsdir_caches.put(key, dir);
@@ -59,7 +67,15 @@ public final class Globals {
     public static void setKafkaProperties(String key, Properties prop) {
         kafka_properties_caches.put(key, prop);
     }
-    
+
+    public static Channel getRabbitMQChannel(Integer hashCode) {
+        if (operators.containsKey(hashCode)) {
+            OperatorDefine optdefine = operators.get(hashCode);
+            return rabbitmq_channel_caches.get(optdefine.getKey());
+        }
+        return null;
+    }
+
     public static FSDirectory getLuceneDir(Integer hashCode) {
         if (operators.containsKey(hashCode)) {
             OperatorDefine optdefine = operators.get(hashCode);

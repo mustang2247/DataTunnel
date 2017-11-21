@@ -7,7 +7,6 @@ import com.bytegriffin.datatunnel.core.Param;
 import com.bytegriffin.datatunnel.meta.KafkaContext;
 import com.bytegriffin.datatunnel.meta.Record;
 import com.bytegriffin.datatunnel.sql.Field;
-import com.bytegriffin.datatunnel.sql.SqlMapper;
 import com.google.common.collect.Lists;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -32,7 +31,7 @@ public class KafkaConsumeReader implements Readable {
         OperatorDefine opt = Globals.operators.get(this.hashCode());
         @SuppressWarnings("resource")
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
-        String topic = getTopicName(opt.getValue());
+        String topic = props.getProperty(KafkaContext.topic);
         consumer.subscribe(Collections.singletonList(topic));
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(KafkaContext.batch_size);
@@ -44,17 +43,6 @@ public class KafkaConsumeReader implements Readable {
             ctx.write(msg);
             logger.info("线程[{}]调用KafkaConsumeReader执行任务[{}]", Thread.currentThread().getName(), opt.getKey());
         }
-    }
-
-    /**
-     * 获取topic名称
-     * 格式：select * from topic_name
-     *
-     * @param sql
-     * @return
-     */
-    private String getTopicName(String sql) {
-        return SqlMapper.select(sql).getTableName();
     }
 
     /**
