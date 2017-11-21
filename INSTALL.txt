@@ -37,7 +37,9 @@
     Windows
       set PATH="C:\Program Files\datatunnel-x.y.z-release\bin";%PATH%
 
-  7) 在命令行输入"datatunnel"确认是否已配置成功。
+  7) 配置conf/tasks-define.xml文件
+
+  8) 运行./bin/datatunnel start
 
   协议
   ---------
