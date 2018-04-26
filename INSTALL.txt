@@ -1,0 +1,48 @@
+
+                          DataTunnel
+
+  它是啥?
+  -----------
+
+  DataTunnel是一款基于异构环境的数据处理管道。
+
+  系统需求
+  -------------------
+
+  JDK：1.8或以上
+  内存：至少2G以上。
+  磁盘：至少2G以上。
+  操作系统:
+    Windows:
+       Windows 2000以上.
+    Unix based systems (Linux, Solaris and Mac OS X) 或者其他:
+       Linux, Solaris, Mac OS X, Ubuntu CentOS 等等.
+
+  安装
+  ----------------
+  1) 请确保本机已经安装Git，Maven，并且配置好了JDK1.8。
+
+  2) 下载整个项目 git clone https://github.com/bytegriffin/DataTunnel.git，会得到名为DataTunnel的文件夹。
+
+  3) 执行 cd DataTunnel && mvn clean install package 命令。
+
+  4) 在DataTunnel/target目录下会得到一个名为datatunnel-x.y.z-release.tar.gz的文件。
+     解压这个文件: tar zxvf datatunnel-x.y.z-release.tar.gz
+
+  5) 解压“datatunnel-x.y.z-bin.tar.gz”这个文件之后，会得到一个名为"datatunnel-x.y.z-bin"的文件夹。
+
+  6) 将文件夹"datatunnel-x.y.z-bin"复制到你想安装的目录下，并配置环境变量, 例如:
+    Unix-based operating systems
+      export PATH=/opt/datatunnel-x.y.z-release/bin:$PATH
+    Windows
+      set PATH="C:\Program Files\datatunnel-x.y.z-release\bin";%PATH%
+
+  7) 配置conf/tasks-define.xml文件
+
+  8) 运行./bin/datatunnel start
+
+  协议
+  ---------
+
+  请参看同目录下的LICENSE文件.
+

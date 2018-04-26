@@ -1,230 +1,301 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>com.ganqiang</groupId>
-    <artifactId>DataTunnel</artifactId>
-    <version>1.0-beta</version>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.bytegriffin</groupId>
+	<artifactId>datatunnel</artifactId>
+	<version>0.2.0</version>
+	<packaging>jar</packaging>
+	<name>DataTunnel</name>
+	<url>https://github.com/bytegriffin/DataTunnel</url>
 
-    <dependencies>
+	<developers>
+		<developer>
+			<id>bytegriffin</id>
+			<name>Qiang Gan</name>
+			<email>bytegriffin@126.com</email>
+		</developer>
+	</developers>
 
-    <dependency>
-				<groupId>redis.clients</groupId>
-				<artifactId>jedis</artifactId>
-				<version>2.6.1</version>
-			</dependency>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+		</license>
+	</licenses>
 
-    <dependency>
-		    <groupId>com.github.jsqlparser</groupId>
-		    <artifactId>jsqlparser</artifactId>
-		    <version>0.9</version>
+	<properties>
+		<log4j.version>2.11.0</log4j.version>
+		<slf4j.version>1.7.25</slf4j.version>
+		<dom4j.version>2.1.0</dom4j.version>
+		<!-- 注意：以下是java8的，和java6、java7不一样 -->
+		<hikaricp.version>3.0.0</hikaricp.version>
+		<mysql.version>6.0.6</mysql.version>
+		<guava.version>23.0</guava.version>
+		<hbase.version>1.4.3</hbase.version>
+		<jsqlparser.version>1.1</jsqlparser.version>
+		<mongodb.version>3.6.3</mongodb.version>
+		<kafka.version>1.1.0</kafka.version>
+		<jedis.version>2.9.0</jedis.version>
+		<!-- 注意：lucene版本需要java8 -->
+		<lucene.version>7.3.0</lucene.version>
+		<rabbitmq.version>5.2.0</rabbitmq.version>
+		<protostuff.version>1.6.0</protostuff.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+	</properties>
+
+	<dependencies>
+		
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${log4j.version}</version>
 		</dependency>
-    
-    <dependency>
-				<groupId>org.mongodb</groupId>
-				<artifactId>mongo-java-driver</artifactId>
-				<version>2.12.4</version>
-			</dependency>
 
-			<dependency>
-				<groupId>org.apache.hive</groupId>
-				<artifactId>hive-jdbc</artifactId>
-				<version>0.14.0</version>
-			</dependency>
-			
-			<dependency>
-				<groupId>org.apache.hive</groupId>
-				<artifactId>hive-common</artifactId>
-				<version>0.14.0</version>
-			</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
 
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
 
-    	<dependency>
-			<groupId>org.apache.hbase</groupId>
-			<artifactId>hbase-hadoop2-compat</artifactId>
-			<version>0.98.5-hadoop2</version>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-nop</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+			<version>${dom4j.version}</version>
+		</dependency>
+
+		<!-- 注意：以下是java8的，和java6、java7不一样 -->
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>${hikaricp.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.github.jsqlparser</groupId>
+			<artifactId>jsqlparser</artifactId>
+			<version>${jsqlparser.version}</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>com.google.guava</groupId>
+		    <artifactId>guava</artifactId>
+		    <version>${guava.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-client</artifactId>
-			<version>0.98.5-hadoop2</version>
+			<version>${hbase.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-mapreduce-client-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jruby.jcodings</groupId>
+					<artifactId>jcodings</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jruby.joni</groupId>
+					<artifactId>joni</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hbase</groupId>
+					<artifactId>hbase-annotations</artifactId>
+				</exclusion>
+				<exclusion>
+					<artifactId>junit</artifactId>
+					<groupId>junit</groupId>
+				</exclusion>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-beanutils</groupId>
+					<artifactId>commons-beanutils</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-beanutils</groupId>
+					<artifactId>commons-beanutils-core</artifactId>
+				</exclusion>
+
+			</exclusions>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.mongodb</groupId>
+		    <artifactId>mongo-java-driver</artifactId>
+		    <version>${mongodb.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.hbase</groupId>
-			<artifactId>hbase-common</artifactId>
-			<version>0.98.5-hadoop2</version>
+		    <groupId>org.apache.kafka</groupId>
+		    <artifactId>kafka-clients</artifactId>
+		    <version>${kafka.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.hbase</groupId>
-			<artifactId>hbase-protocol</artifactId>
-			<version>0.98.5-hadoop2</version>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>${jedis.version}</version>
 		</dependency>
 		
 		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-client</artifactId>
-			<version>2.4.1</version>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-core</artifactId>
+			<version>${lucene.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-annotations</artifactId>
-			<version>2.4.1</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>com.google.protobuf</groupId>
-			<artifactId>protobuf-java</artifactId>
-			<version>2.5.0</version>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analyzers-common</artifactId>
+			<version>${lucene.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-common</artifactId>
-			<version>2.4.1</version>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analyzers-smartcn</artifactId>
+			<version>${lucene.version}</version>
 		</dependency>
 		
 		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-hdfs</artifactId>
-			<version>2.4.1</version>
+		  <groupId>com.rabbitmq</groupId>
+		  <artifactId>amqp-client</artifactId>
+		  <version>${rabbitmq.version}</version>
 		</dependency>
 		
 		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-mapreduce-client-app</artifactId>
-			<version>2.4.1</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-mapreduce-client-core</artifactId>
-			<version>2.4.1</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-mapreduce-client-jobclient</artifactId>
-			<version>2.4.1</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-yarn-api</artifactId>
-			<version>2.4.1</version>
+		    <groupId>io.protostuff</groupId>
+		    <artifactId>protostuff-core</artifactId>
+		    <version>${protostuff.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.zookeeper</groupId>
-			<artifactId>zookeeper</artifactId>
-			<version>3.4.6</version>
-		</dependency>
-		
-    	<dependency>
-		  <groupId>dom4j</groupId>
-		  <artifactId>dom4j</artifactId>
-		  <version>1.6.1</version>
-		  <exclusions>  
-        <exclusion>  
-          <groupId>xerces</groupId>
-							<artifactId>xercesImpl</artifactId>
-        </exclusion> 
-      </exclusions>  
-    </dependency>
-   
-			<dependency>
-				<groupId>xerces</groupId>
-				<artifactId>xercesImpl</artifactId>
-				<version>2.9.1</version>
-			</dependency>
-    
-		
-		<dependency>
-		  <groupId>jaxen</groupId>
-		  <artifactId>jaxen</artifactId>
-		  <version>1.1.1</version>
-		</dependency>
-		
-		<dependency>
-		  <groupId>log4j</groupId>
-		  <artifactId>log4j</artifactId>
-		  <version>1.2.17</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.7</version>
+		    <groupId>io.protostuff</groupId>
+		    <artifactId>protostuff-runtime</artifactId>
+		    <version>${protostuff.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.7</version>
-		</dependency>
-		
-		<dependency>
-		  <groupId>mysql</groupId>
-		  <artifactId>mysql-connector-java</artifactId>
-		  <version>5.1.30</version>
-		</dependency>
+	</dependencies>
 
-		<dependency>
-			<groupId>cn.guoyukun.jdbc</groupId>
-			<artifactId>oracle-ojdbc6</artifactId>
-			<version>11.2.0.3.0</version>
-		</dependency>
-		
-		<dependency>
-		  <groupId>org.apache.tomcat</groupId>
-		  <artifactId>tomcat-jdbc</artifactId>
-		  <version>7.0.52</version>
-		</dependency>
-		
-		<dependency>
-		  <groupId>org.apache.tomcat</groupId>
-		  <artifactId>tomcat-juli</artifactId>
-		  <version>7.0.52</version>
-		</dependency>
-		
-    </dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
 
-    <build>
-       <plugins>
-          <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-compiler-plugin</artifactId>
-              <version>3.1</version>
-              <configuration>
-                  <source>1.6</source>
-                  <target>1.6</target>
-                  <fork>true</fork>
-                  <verbose>true</verbose>
-                  <encoding>UTF-8</encoding>
-              </configuration>
-          </plugin>
-       <plugin>
-				    <groupId>org.apache.maven.plugins</groupId>
-				    <artifactId>maven-assembly-plugin</artifactId>
-				    <version>2.2.1</version>
-				    <configuration>
-				      <descriptors>
-				        <descriptor>assembly/assembly.xml</descriptor>
-				      </descriptors>
-				    </configuration>
-				    <executions>
-				      <execution>
-				        <id>make-assembly</id>
-				        <phase>package</phase>
-				        <goals>
-				          <goal>single</goal>
-				        </goals>
-				      </execution>
-				    </executions>
-		  </plugin>
-	   </plugins>	  
-    </build>
+			<!-- 发布项目 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>com.bytegriffin.datatunnel.DataTunnel</mainClass>
+						</manifest>
+					</archive>
+					<descriptors>
+						<descriptor>assembly/assembly.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- 打全量包 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>com.bytegriffin.datatunnel.DataTunnel</mainClass>
+								</transformer>
+							</transformers>
+							<shadedArtifactAttached>true</shadedArtifactAttached>
+							<shadedClassifierName>all-in-one</shadedClassifierName>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- 打依赖包 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<includeScope>runtime</includeScope>
+							<outputDirectory>target/lib/</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+		<!-- 打源码包时需要添加的配置文件 -->
+		<resources>
+			<resource>
+				<directory>${project.basedir}/conf/</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/log4j2.xml</include>
+				</includes>
+			</resource>
+		</resources>
+
+	</build>
 
 </project>

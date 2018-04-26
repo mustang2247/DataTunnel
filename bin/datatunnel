@@ -1,121 +1,155 @@
 #!/bin/sh
 
+# resolve links - "${BASH_SOURCE-$0}" may be a softlink
+this="${BASH_SOURCE-$0}"
+while [ -h "$this" ]; do
+  ls=`ls -ld "$this"`
+  link=`expr "$ls" : '.*-> \(.*\)$'`
+  if expr "$link" : '.*/.*' > /dev/null; then
+    this="$link"
+  else
+    this=`dirname "$this"`/"$link"
+  fi
+done
+
 # Get standard environment variables
-bin=`dirname $0`
+bin=`dirname "$this"`
 
-# Only set DATATUNNEL_HOME if not already set
-[ -z "$DATATUNNEL_HOME" ] && DATATUNNEL_HOME=`cd "$bin/.." ; pwd`
+# Only set datatunnel_home if not already set
+[ -z "$datatunnel_home" ] && datatunnel_home=`cd "$bin/.." ; pwd`
 
-if [ -r "$DATATUNNEL_HOME"/bin/datatunnel-env.sh ]; then
-     BASEDIR="$DATATUNNEL_HOME"
-  . "$DATATUNNEL_HOME"/bin/datatunnel-env.sh
-else
-  echo "Cannot find $DATATUNNEL_HOME/bin/datatunnel-env.sh"
-  echo "This file is needed to run this program"
+BASEDIR="$datatunnel_home"
+
+# Make sure prerequisite environment variables are set
+if [ -z "$JAVA_HOME" -a -z "$JRE_HOME" ]; then
+  JAVA_PATH=`which java 2>/dev/null`
+  if [ "x$JAVA_PATH" != "x" ]; then
+    JAVA_PATH=`dirname $JAVA_PATH 2>/dev/null`
+    JRE_HOME=`dirname $JAVA_PATH 2>/dev/null`
+  fi
+  if [ "x$JRE_HOME" = "x" ]; then
+    if [ -x /usr/bin/java ]; then
+      JRE_HOME=/usr
+    fi
+  fi
+  if [ -z "$JAVA_HOME" -a -z "$JRE_HOME" ]; then
+    echo "Neither the JAVA_HOME nor the JRE_HOME environment variable is defined"
+    echo "At least one of these environment variable is needed to run this program"
+    exit 1
+  fi
+fi
+
+if [ -z "$JRE_HOME" ]; then
+  JRE_HOME="$JAVA_HOME"
+fi
+
+if [ -z "$BASEDIR" ]; then
+  echo "The BASEDIR environment variable is not defined"
+  echo "This environment variable is needed to run this program"
   exit 1
 fi
 
-if [ -x "$DATATUNNEL_HOME"/bin/datatunnel-env.sh ]; then
-  . "$DATATUNNEL_HOME"/bin/datatunnel-env.sh 
+# Set standard CLASSPATH
+if [ "$1" = "debug" -o "$1" = "javac" ] ; then
+  if [ -f "$JAVA_HOME"/lib/tools.jar ]; then
+    CLASSPATH="$JAVA_HOME"/lib/tools.jar
+  fi
 fi
+
+for lib in "$BASEDIR"/lib/*.jar
+do
+  CLASSPATH=$CLASSPATH:$lib
+done
+CLASSPATH=$CLASSPATH:"$BASEDIR"/conf
+
+# Set standard commands for invoking Java.
+RUNJAVA="$JRE_HOME"/bin/java
 
 # Now switch to home directory of echo
-cd $DATATUNNEL_HOME
+cd $datatunnel_home
 
 if [ -z "$JAVA_OPTS" ]; then
-  JAVA_OPTS="-server -Xms2560m -Xprof -Xmx2560m -Xmn2g -XX:+UseParallelGC -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8 -Djcore.parser=SAX"
+  JAVA_OPTS="-server -Xms2560m -Xmx2560m -Xmn2g -XX:+UseParallelGC -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
 else
-  JAVA_OPTS="$JAVA_OPTS -server -Xms2560m -Xprof -Xmx2560m -Xmn2g -XX:+UseParallelGC -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
+  JAVA_OPTS="$JAVA_OPTS -server -Xms2560m -Xmx2560m -Xmn2g -XX:+UseParallelGC -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8"
 fi
 
-export DATATUNNEL_PID=$DATATUNNEL_HOME/datatunnel.pid
-export DATATUNNEL_MONITOR_PID=$DATATUNNEL_HOME/datatunnel-monitor.pid
-export DATATUNNEL_PRGNAME="datatunnel"
+export datatunnel_pid=$datatunnel_home/datatunnel.pid
+export datatunnel_prgname="DataTunnel"
 
-check_process_exists()
-{
-  if [ -f "$DATATUNNEL_PID" ]; then
-    pid=`cat $DATATUNNEL_PID`
-    [ -z $pid ] &&  pid="-1"
-    kill -0 $pid > /dev/null 2>&1
-    find_pids=`ps aux | grep $DATATUNNEL_PRGNAME | grep -v 'grep' | awk '{print $2}'`
-    for find_pid in $find_pids
-    do  
-      if [ $find_pid = $pid ]; then
-        echo "Process exists, can't start or run new process"
-        exit 0
-      fi  
-    done
-  fi
+psid=0
+
+checkpid() {  
+   javaps=`$JAVA_HOME/bin/jps | grep $datatunnel_prgname`
+   if [ -n "$javaps" ]; then  
+      psid=`echo $javaps | awk '{print $1}'`  
+   else  
+      psid=0  
+   fi
 }
 
 # if no args specified, show usage
 if [ $# -lt 1 ]; then
   more <<'EOF'
-+====================================================+
-|    DataTunnel : a data processing channel          |
-+----------------------------------------------------+
-|Usage:   datatunnel  <params>                       |
-|params:  start,     Start the datatunnel            |
-|         stop,      Stop the datatunnel             |
-|         restart,   ReStart the datatunnel          |
-+====================================================+
+Usage:  datatunnel  <Commands>                        
+Commands:           start       start the datatunnel      
+                    restart     restart the datatunnel    
+                    stop        stop the datatunnel       
 EOF
   exit 1
 fi
 
 if [ "$1" = "start" ] ; then
-  check_process_exists
-  if [ ! -d "$DATATUNNEL_HOME"/log ]; then
-    mkdir $DATATUNNEL_HOME/log
+  if [ ! -d "$datatunnel_home"/log ]; then
+    mkdir $datatunnel_home/log
+    chmod a+x $datatunnel_home/log
   fi
-  while true;
-  do
-    $DATATUNNEL_HOME/bin/datatunnel-monitor.sh $RUNJAVA -classpath $CLASSPATH $JAVA_OPTS com.ganqiang.datatunnel.DataTunnel
-    code=$?
-    #echo "DataTunnel is terminated and exit code is " $code
-    if [ $code == 0 ]; then
-      exit $code
-    fi
-    echo "DataTunnel is going to be restarted 5 seconds"
-    sleep 5;
-  done &
-  echo $! > $DATATUNNEL_MONITOR_PID
-  echo "Start the datatunnel success."
+  checkpid
+  if [ $psid -ne 0 ]; then
+	echo "DataTunnel已经处于运行状态。"
+  else
+  	if [ -f "$datatunnel_pid" ]; then
+  	   rm -rf $datatunnel_pid
+	fi
+	$RUNJAVA -classpath $CLASSPATH $JAVA_OPTS com.bytegriffin.datatunnel.DataTunnel & 
+	checkpid
+	if [ $psid -ne 0 ]; then
+	   echo $psid >> $datatunnel_pid
+	   echo "DataTunnel正在启动。。。"
+	else
+	   echo "DataTunnel启动失败。"
+	fi
+  fi
 elif [ "$1" = "restart" ] ; then
-  if [ -f "$DATATUNNEL_PID" ]; then
-    kill -9 `cat $DATATUNNEL_MONITOR_PID` > /dev/null 2>&1 | xargs rm -rf $DATATUNNEL_MONITOR_PID
-    kill -9 `cat $DATATUNNEL_PID` > /dev/null 2>&1 | xargs rm -rf $DATATUNNEL_PID
-    echo "Stop success."
+  if [ -f "$datatunnel_pid" ]; then
+    kill -9 `cat $datatunnel_pid` > /dev/null 2>&1 | xargs rm -rf $datatunnel_pid
   else
-    ps -ef | grep $DATATUNNEL_PRGNAME | awk '{print $2}' | xargs kill -9 > /dev/null 2>&1 &
-    #echo "Stop failed: $DATATUNNEL_PID not exist"
+    ps -ef | grep $datatunnel_prgname | awk '{print $2}' | xargs kill -9 > /dev/null 2>&1 &
   fi
-  check_process_exists
-  if [ ! -d "$DATATUNNEL_HOME"/log ]; then
-    mkdir $DATATUNNEL_HOME/log
+  if [ ! -d "$datatunnel_home"/log ]; then
+    mkdir $datatunnel_home/log
   fi
-  while true;
-  do
-    $DATATUNNEL_HOME/bin/datatunnel-monitor.sh $RUNJAVA -classpath $CLASSPATH $JAVA_OPTS com.ganqiang.datatunnel.DataTunnel
-    code=$?
-    #echo "DataTunnel is terminated and exit code is " $code
-    if [ $code == 0 ]; then
-      exit $code
-    fi
-    echo "DataTunnel is going to be restarted 5 seconds"
-    sleep 5;
-  done &
-  echo $! > $DATATUNNEL_MONITOR_PID
-  echo "ReStart the datatunnel success."
+  $RUNJAVA -classpath $CLASSPATH $JAVA_OPTS com.bytegriffin.datatunnel.DataTunnel &
+  checkpid
+  if [ $psid -ne 0 ]; then
+  	echo $psid >> $datatunnel_pid
+    echo "DataTunnel正在重启。。。"
+  else
+	echo "DataTunnel重启失败。"
+  fi
 elif [ "$1" = "stop" ] ; then
-  if [ -f "$DATATUNNEL_PID" ]; then
-    kill -9 `cat $DATATUNNEL_MONITOR_PID` > /dev/null 2>&1 | xargs rm -rf $DATATUNNEL_MONITOR_PID
-    kill -9 `cat $DATATUNNEL_PID` > /dev/null 2>&1 | xargs rm -rf $DATATUNNEL_PID
-    echo "Stop success."
+  if [ -f "$datatunnel_pid" ]; then
+    kill -9 `cat $datatunnel_pid` > /dev/null 2>&1 | xargs rm -rf $datatunnel_pid
+    echo "DataTunnel成功关闭。"
   else
-    ps -ef | grep $DATATUNNEL_PRGNAME | awk '{print $2}' | xargs kill -9 > /dev/null 2>&1 &
-    #echo "Stop failed: $DATATUNNEL_PID not exist"
+    ps -ef | grep $datatunnel_prgname | awk '{print $2}' | xargs kill -9 > /dev/null 2>&1 &
   fi
+else
+  more <<'EOF'
+Usage:  datatunnel  <Commands>                        
+Commands:           start       start the datatunnel      
+                    restart     restart the datatunnel    
+                    stop        stop the datatunnel    
+EOF
+  exit 1
 fi
-

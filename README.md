@@ -1,36 +1,13 @@
+![Image text](https://raw.githubusercontent.com/bytegriffin/DataTunnel/master/logo.png)
+===========================
+  DataTunnelæ˜¯ä¸€æ¬¾åŸºäºå¼‚æ„ç¯å¢ƒçš„æ•°æ®å¤„ç†ç®¡é“ï¼Œè¯•å›¾ç”¨ç±»SQLè¯­å¥æ¥è§£å†³å¼‚æ„å­˜å‚¨/æ•°æ®æµç­‰ç¯å¢ƒä¸‹çš„æ•°æ®æ¸…æ´—ã€æ•°æ®åŒæ­¥ã€æ•°æ®ç»Ÿè®¡ç­‰å·¥ä½œã€‚
 
-                                 DataTunnel
-![Image text](https://github.com/ganqiang1983/DataTunnel/blob/master/logo.gif)
+# ç‰¹æ€§
+* ä»»åŠ¡åŒ–ç®¡ç†æ¨¡å¼ï¼Œå¯åŒæ—¶è¿è¡Œä¸åŒçš„ä»»åŠ¡
+* æ”¯æŒå®šæ—¶ã€ç«‹å³è¿è¡Œæ¨¡å¼
+* æ”¯æŒé…ç½®ä½¿ç”¨æˆ–APIè°ƒç”¨ï¼ˆè‡ªå®šä¹‰Readeræˆ–Writeræ¥å£ï¼‰
+* é…ç½®çš„æ ¸å¿ƒå°±æ˜¯ç±»SQLè¯­è¨€ï¼Œé™ä½ä½¿ç”¨æˆæœ¬ï¼Œå¦‚æœæƒ…å†µç‰¹åˆ«å¤æ‚å¯ä½¿ç”¨ç¼–ç¨‹åµŒå…¥çš„æ–¹å¼
+* æ”¯æŒä¸åŒçš„ä¸­é—´ä»¶è¿›è¡Œæ•°æ®æµé€šï¼šMysqlã€MongoDBã€HBaseã€Kafkaã€RabbitMQç­‰ï¼Œå¯æ¨ªå‘æ‹“å±•ã€‚
 
-  What is it? <br />
-  DataTunnelÊÇÒ»¿î»ùÓÚÒì¹¹´æ´¢µÄÊı¾İ´¦Àí¹ÜµÀ£¬¿ÉÒÔÊ®·Ö·½±ãÓÃÓÚÁ½¸öÍ¬¹¹»òÒì¹¹´æ´¢  <br /> 
-Ö®¼äµÄÊı¾İÍ¬²½£¬Êı¾İÍ³¼ÆµÈÊı¾İ´¦Àí¹¤×÷¡£ <br /> 
-
-Í¬Ê±£¬Ëü¾ßÓĞÒÔÏÂÌØµã£º  <br /> 
-1.¼¯³É¶àÀàĞÍ´æ´¢£ºMysql/Oracle/Hive/HDFS/HBase/MongoDB/Redis <br /> 
-
-2.¼òµ¥ÅäÖÃ£º¹ØÏµĞÔÊı¾İ¿âÖ»ĞèÒªÅäÖÃSql£¬HiveĞèÒªÅäÖÃhql£¬¾Í¿ÉÒÔÖ±½ÓÔËĞĞ£¬ <br /> 
-                          ¶øÆäËûÀàĞÍ´æ´¢Ä¿Ç°°æ±¾ĞèÒªÊµÏÖ½Ó¿Ú¡£ <br /> 
-
-3.¿ÉÀ©Õ¹±à³Ì½Ó¿Ú£º¸´ÔÓµÄÓ¦ÓÃ¿ÉÒÔ×Ô¶¨Òå½Ó¿Ú³ÌĞò£¬Ö»ĞèÊµÏÖReadableºÍWriteable½Ó¿Ú¼´¿É¡£ <br /> 
-
-4.¶àÈÎÎñÖ§³Ö£ºÖ§³Ö¶à¸öÈÎÎñÔÚ¶àÏß³Ì»·¾³ÏÂÍ¬Ê±ÔËĞĞ¡£ <br /> 
-
-  -----------
-
-  The Current Version : 1.0-beta
-
-  -----------
-
-  Package : <br />
-  mvn clean package
-  
-  -----------
-
-  Run: <br />
-  cd target<br />
-  tar xvf DataTunnel-version-bin.tar.gz<br />
-  chmod -R 700 DataTunnel-version-bin<br />
-  ./DataTunnel-version-bin/datatunnel start/stop/restart
-
-
+# å®‰è£…
+è¯·æŸ¥çœ‹INSTALL.txtæ–‡ä»¶
